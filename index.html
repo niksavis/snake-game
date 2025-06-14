@@ -12,28 +12,23 @@
             <h1>Snake Game</h1>
             <p>Use arrow keys to control the snake</p>
             <button id="start-button" onclick="startGame()">Start Game</button>
-        </div>
-          <div id="game-screen" class="screen hidden">
+        </div>          <div id="game-screen" class="screen hidden">
             <div class="game-header">
                 <span id="score">Score: 0</span>
                 <button id="pause-button">Pause</button>
+                <button id="sound-toggle">🔊 Sound On</button>
             </div>
             <div class="canvas-container">
                 <canvas id="game-canvas"></canvas>
             </div>
-        </div>        <div id="game-over-screen" class="screen hidden">
+        </div><div id="game-over-screen" class="screen hidden">
             <h1>Game Over!</h1>
             <p>Your final score: <span id="final-score">0</span></p>
             <p id="high-score">High Score: 0</p>
             <button id="restart-button">Play Again</button>
         </div>
     </div>
-    
-    <div class="controls">
-        <button id="sound-toggle">🔊 Sound On</button>
-    </div>
-    
-    <script src="sounds.js"></script>
+      <script src="sounds.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

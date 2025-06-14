@@ -79,6 +79,9 @@ button:focus {
   width: 100%;
   max-width: 100%;
   padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .canvas-container {
@@ -107,11 +110,7 @@ button:focus {
   color: #4a752c;
 }
 
-.controls {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
+/* Removed .controls as sound toggle is now in game header */
 
 .powerup-message {
   position: absolute;
@@ -147,6 +146,7 @@ button:focus {
   background-color: #757575;
   padding: 5px 10px;
   font-size: 14px;
+  margin-left: 5px;
 }
 
 #sound-toggle:hover {

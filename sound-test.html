@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4a752c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #5c9137;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .log-container {
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f5f5f5;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sound Test and Debug</h1>
+    
+    <div>
+        <h2>Sound Controls</h2>
+        <button id="eatSound">Test Eat Sound</button>
+        <button id="moveSound">Test Move Sound</button>
+        <button id="gameOverSound">Test Game Over Sound</button>
+        <button id="powerupSound">Test Powerup Sound</button>
+        <button id="specialFoodSound">Test Special Food Sound</button>
+        <button id="soundToggle">🔊 Sound On</button>
+    </div>
+    
+    <div class="status">
+        <h2>Sound Status</h2>
+        <div id="eatStatus">Eat Sound: Loading...</div>
+        <div id="moveStatus">Move Sound: Loading...</div>
+        <div id="gameOverStatus">Game Over Sound: Loading...</div>
+        <div id="powerupStatus">Powerup Sound: Loading...</div>
+        <div id="specialStatus">Special Food Sound: Loading...</div>
+    </div>
+    
+    <div class="log-container" id="log">
+        <h3>Debug Log</h3>
+    </div>
+
+    <script src="sounds.js"></script>
+    <script>
+        // Override console.log to display in our debug area
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function() {
+            const args = Array.from(arguments);
+            originalLog.apply(console, args);
+            
+            const logContainer = document.getElementById('log');
+            const logEntry = document.createElement('div');
+            logEntry.textContent = args.join(' ');
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        };
+        
+        console.error = function() {
+            const args = Array.from(arguments);
+            originalError.apply(console, args);
+            
+            const logContainer = document.getElementById('log');
+            const logEntry = document.createElement('div');
+            logEntry.style.color = 'red';
+            logEntry.textContent = 'ERROR: ' + args.join(' ');
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing sounds...');
+            
+            // Initialize sounds
+            initSounds().then(() => {
+                console.log('Sounds initialized successfully');
+                updateAudioContextStatus();
+            }).catch(error => {
+                console.error('Error initializing sounds:', error);
+            });
+            
+            setupSoundControls();
+            
+            // Set up buttons for testing sounds
+            document.getElementById('eatSound').addEventListener('click', () => {
+                console.log('Playing eat sound');
+                playSound(eatSound);
+            });
+            
+            document.getElementById('moveSound').addEventListener('click', () => {
+                console.log('Playing move sound');
+                playSound(moveSound);
+            });
+            
+            document.getElementById('gameOverSound').addEventListener('click', () => {
+                console.log('Playing game over sound');
+                playSound(gameOverSound);
+            });
+            
+            document.getElementById('powerupSound').addEventListener('click', () => {
+                console.log('Playing powerup sound');
+                playSound(powerupSound);
+            });
+            
+            document.getElementById('specialFoodSound').addEventListener('click', () => {
+                console.log('Playing special food sound');
+                playSound(specialFoodSound);
+            });
+        });
+        
+        // Check Web Audio API status
+        function updateAudioContextStatus() {
+            const statusElements = {
+                'eatStatus': 'Eat Sound',
+                'moveStatus': 'Move Sound', 
+                'gameOverStatus': 'Game Over Sound',
+                'powerupStatus': 'Powerup Sound',
+                'specialStatus': 'Special Food Sound'
+            };
+            
+            for (const [elementId, name] of Object.entries(statusElements)) {
+                const element = document.getElementById(elementId);
+                element.textContent = `${name}: Using Web Audio API`;
+            }
+            
+            // Add additional info about AudioContext
+            const element = document.getElementById('eatStatus');
+            if (audioContext) {
+                const state = audioContext.state;
+                element.textContent += ` (AudioContext state: ${state})`;
+                
+                if (state === 'suspended') {
+                    element.textContent += ' - Click anywhere to activate sounds';
+                    // Add click handler to resume AudioContext
+                    document.body.addEventListener('click', function resumeAudio() {
+                        audioContext.resume().then(() => {
+                            console.log('AudioContext resumed');
+                            updateAudioContextStatus();
+                        });
+                        document.body.removeEventListener('click', resumeAudio);
+                    }, { once: true });
+                }
+            } else {
+                element.textContent += ' (AudioContext not supported)';
+            }
+        }
+    </script>
+</body>
+</html>

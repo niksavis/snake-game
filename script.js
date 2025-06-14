@@ -251,9 +251,8 @@ function gameLoop() {
         // Increase score
         score += 10;
         scoreDisplay.textContent = `Score: ${score}`;
-        
-        // Play eat sound
-        playSound(eatSound);
+          // Play eat sound
+        safePlaySound(eatSound);
         
         // Don't remove the last segment (snake grows)
         // Generate new food
@@ -291,10 +290,8 @@ function gameLoop() {
                 snake.push({...tail}, {...tail});
                 displayPowerupMessage("Super Growth! 🐍");
                 break;
-        }
-        
-        // Play special sound for power-up
-        playSound(eatSound);
+        }        // Play special sound for power-up
+        safePlaySound(specialFoodSound);
         
         // Remove special food
         hasSpecialFood = false;
@@ -353,10 +350,9 @@ function moveSnake() {
             newHead.x += 1;
             break;
     }
-    
-    // Play move sound occasionally (not on every frame to avoid sound overlap)
+      // Play move sound occasionally (not on every frame to avoid sound overlap)
     if (Math.random() < 0.1) {
-        playSound(moveSound);
+        safePlaySound(moveSound);
     }
     
     // Add the new head to the beginning of the snake array
@@ -691,9 +687,8 @@ function gameOver() {
     
     // Update game state
     gameState = 'gameOver';
-    
-    // Play game over sound
-    playSound(gameOverSound);
+      // Play game over sound
+    safePlaySound(gameOverSound);
     
     // Check for high score
     if (score > highScore) {
@@ -708,4 +703,9 @@ function gameOver() {
     // Show game over screen
     gameScreen.classList.add('hidden');
     gameOverScreen.classList.remove('hidden');
+}
+
+// Helper function to safely play sounds (replaced with direct playSound call since Web Audio API is more reliable)
+function safePlaySound(sound) {
+    playSound(sound);
 }

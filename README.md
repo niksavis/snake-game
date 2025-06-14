@@ -44,8 +44,7 @@ This game is built with:
 - `index.html` - Main HTML document
 - `style.css` - CSS styling
 - `script.js` - Core game logic
-- `sounds.js` - Sound management
-- `assets/` - Sound files and other assets
+- `sounds.js` - Sound management using Web Audio API
 
 ## Accessibility Features
 
