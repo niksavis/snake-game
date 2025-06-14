@@ -9,6 +9,7 @@ let gridSize = 20;
 let direction = 'right';
 let gameSpeed = 100;
 let gameInterval;
+let frameCount = 0; // Counter for game frames
 let isPaused = false;
 let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
@@ -175,8 +176,7 @@ function setupTouchControls() {
 
 function startGame() {
     debug('Starting game...');
-    try {
-        // Reset game variables
+    try {        // Reset game variables
         snake = [
             { x: 5, y: 5 },
             { x: 4, y: 5 },
@@ -185,6 +185,7 @@ function startGame() {
         direction = 'right';
         score = 0;
         isPaused = false;
+        frameCount = 0; // Reset frame counter
         
         // Update displays
         if (scoreDisplay) {
@@ -349,9 +350,11 @@ function moveSnake() {
         case 'right':
             newHead.x += 1;
             break;
-    }
-      // Play move sound occasionally (not on every frame to avoid sound overlap)
-    if (Math.random() < 0.1) {
+    }    // Increment frame counter
+    frameCount++;
+    
+    // Play move sound at regular intervals (every 5 frames) for consistent feedback
+    if (frameCount % 5 === 0) {
         safePlaySound(moveSound);
     }
     

@@ -138,10 +138,4 @@ The game uses pure vanilla JavaScript, HTML5 Canvas, and CSS as specified, with 
 - [x] Fix sound loading errors by using embedded base64 audio data
 - [x] Solve audio playback issues by implementing Web Audio API for reliable cross-browser sound
 - [x] Remove unused sound files and assets directory for cleaner codebase
-
-### 3. Additional Enhancements (Optional)
-
-- [ ] Add background music option with toggle
-- [ ] Implement volume control slider
-- [ ] Create sound themes that match different visual styles
-- [ ] Deploy to GitHub Pages or similar service
+- [x] Improve moveSound consistency with regular intervals instead of random playback

@@ -113,9 +113,8 @@ function playSound(soundType) {
                 
                 oscillator.start();
                 oscillator.stop(now + duration);
-            }
-        } else if (soundType === moveSound) {
-            createBeepSound(220, 0.05, 'sine', 0.1); // Very soft, low beep
+            }        } else if (soundType === moveSound) {
+            createBeepSound(180, 0.03, 'sine', 0.05); // Extra soft, very short beep
         } else if (soundType === powerupSound) {
             // Create ascending powerup sound
             if (audioContext) {
