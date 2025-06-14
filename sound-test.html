@@ -43,15 +43,13 @@
 </head>
 <body>
     <h1>Sound Test and Debug</h1>
-    
-    <div>
+      <div>
         <h2>Sound Controls</h2>
         <button id="eatSound">Test Eat Sound</button>
         <button id="moveSound">Test Move Sound</button>
         <button id="gameOverSound">Test Game Over Sound</button>
         <button id="powerupSound">Test Powerup Sound</button>
         <button id="specialFoodSound">Test Special Food Sound</button>
-        <button id="soundToggle">🔊 Sound On</button>
     </div>
     
     <div class="status">
@@ -98,16 +96,13 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing sounds...');
-            
-            // Initialize sounds
+              // Initialize sounds
             initSounds().then(() => {
                 console.log('Sounds initialized successfully');
                 updateAudioContextStatus();
             }).catch(error => {
                 console.error('Error initializing sounds:', error);
             });
-            
-            setupSoundControls();
             
             // Set up buttons for testing sounds
             document.getElementById('eatSound').addEventListener('click', () => {
