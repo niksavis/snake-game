@@ -26,19 +26,10 @@ let finalScoreDisplay;
 let highScoreDisplay;
 let soundToggle;
 
-// Debug function
+// Debug function - disabled in production
 function debug(message) {
-    const debugElement = document.getElementById('debug');
-    if (debugElement) {
-        const timestamp = new Date().toLocaleTimeString();
-        debugElement.innerHTML += `<div>[${timestamp}] ${message}</div>`;
-        // Keep only the last 5 messages
-        const messages = debugElement.getElementsByTagName('div');
-        while (messages.length > 5) {
-            debugElement.removeChild(messages[0]);
-        }
-    }
-    console.log(message);
+    // Console logging can be enabled during development
+    // console.log(message);
 }
 
 // Wait for DOM to be fully loaded

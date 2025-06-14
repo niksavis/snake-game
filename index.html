@@ -6,10 +6,8 @@
     <title>Snake Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div id="debug" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px; font-size: 12px; z-index: 9999;"></div>
-    <button onclick="debug('Test button clicked!')" style="position: fixed; top: 10px; right: 10px; z-index: 9999;">Test Debug</button>
-    <div class="game-container">        <div id="start-screen" class="screen">
+<body>    <div id="debug" style="display: none;"></div>
+    <div class="game-container"><div id="start-screen" class="screen">
             <h1>Snake Game</h1>
             <p>Use arrow keys to control the snake</p>
             <button id="start-button" onclick="startGame()">Start Game</button>
