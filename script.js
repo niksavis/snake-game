@@ -15,6 +15,8 @@ let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
 let gameState = 'start'; // 'start', 'playing', 'gameOver'
 let scoreAnimations = []; // Array to store floating score animations
+// We'll check localStorage directly when needed instead of using a global variable
+// This ensures we always use the current value as set by the popup-messages.js module
 
 // DOM elements - will initialize these in the init function
 let startScreen;
@@ -27,6 +29,7 @@ let scoreDisplay;
 let finalScoreDisplay;
 let highScoreDisplay;
 let soundToggle;
+let popupToggle;
 
 // Debug function - disabled in production
 function debug(message) {
@@ -46,11 +49,12 @@ function init() {
         gameOverScreen = document.getElementById('game-over-screen');
         startButton = document.getElementById('start-button');
         pauseButton = document.getElementById('pause-button');
-        restartButton = document.getElementById('restart-button');
-        scoreDisplay = document.getElementById('score');
+        restartButton = document.getElementById('restart-button');        scoreDisplay = document.getElementById('score');
         finalScoreDisplay = document.getElementById('final-score');
         highScoreDisplay = document.getElementById('high-score');
         soundToggle = document.getElementById('sound-toggle');
+        popupToggle = document.getElementById('popup-toggle');
+          // Note: popup message settings are now initialized in popup-messages.js
         
         // Initialize the canvas
         canvas = document.getElementById('game-canvas');
@@ -300,6 +304,11 @@ function gameLoop() {
         // Remove the last segment (snake moves without growing)
         snake.pop();
     }    function displayPowerupMessage(message) {
+        // Check if popup messages are disabled (read current state from localStorage)
+        if (localStorage.getItem('popupMessagesEnabled') === 'false') {
+            return;
+        }
+
         const powerupMsg = document.createElement('div');
         powerupMsg.className = 'powerup-message';
         
@@ -956,6 +965,21 @@ function handleKeyPress(event) {
 function togglePause() {
     isPaused = !isPaused;
     pauseButton.textContent = isPaused ? 'Resume' : 'Pause';
+    
+    // Add visual feedback by toggling class
+    if (isPaused) {
+        pauseButton.classList.add('resumed');
+        pauseButton.title = "Resume Game";
+    } else {
+        pauseButton.classList.remove('resumed');
+        pauseButton.title = "Pause Game";
+    }
+    
+    // Add button press animation
+    pauseButton.classList.add('pressed');
+    setTimeout(() => {
+        pauseButton.classList.remove('pressed');
+    }, 200);
 }
 
 function gameOver() {
@@ -1045,3 +1069,6 @@ function updateScoreAnimations() {
         }
     }
 }
+
+// Note: popup message functions and event listeners are now in popup-messages.js
+// This ensures consistency and avoids duplicate event listeners

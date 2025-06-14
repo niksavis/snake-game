@@ -1,34 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
-    <link rel="stylesheet" href="style.css">    <!-- Favicon - Using data URI to ensure it works immediately -->
-    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IiM0QTc1MkMiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjODFDNzg0IiAvPgogIDxyZWN0IHg9IjIyIiB5PSIxMCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiByeD0iMiIgZmlsbD0iIzgxQzc4NCIgLz4KICA8cmVjdCB4PSIzNCIgeT0iMTAiIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iNDYiIHk9IjEwIiB3aWR0aD0iOCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiMyRTdEMzIiIC8+CiAgPHJlY3QgeD0iNDYiIHk9IjIyIiB3aWR0aD0iOCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iNDYiIHk9IjM0IiB3aWR0aD0iOCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iMzQiIHk9IjM0IiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjODFDNzg0IiAvPgogIDxyZWN0IHg9IjIyIiB5PSIzNCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiByeD0iMiIgZmlsbD0iIzgxQzc4NCIgLz4KICA8cmVjdCB4PSIxMCIgeT0iMzQiIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjQ2IiB3aWR0aD0iMTIiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjIyIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjODFDNzg0IiAvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iMTQiIHI9IjIiIGZpbGw9IndoaXRlIiAvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iMTgiIHI9IjIiIGZpbGw9IndoaXRlIiAvPgogIDxjaXJjbGUgY3g9IjMwIiBjeT0iMjQiIHI9IjYiIGZpbGw9IiNGRjUyNTIiIC8+Cjwvc3ZnPg==" type="image/svg+xml">    <!-- Emoji fallback for browsers that don't support SVG favicons -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon - Using data URI to ensure it works immediately -->
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IiM0QTc1MkMiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjODFDNzg0IiAvPgogIDxyZWN0IHg9IjIyIiB5PSIxMCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiByeD0iMiIgZmlsbD0iIzgxQzc4NCIgLz4KICA8cmVjdCB4PSIzNCIgeT0iMTAiIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iNDYiIHk9IjEwIiB3aWR0aD0iOCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiMyRTdEMzIiIC8+CiAgPHJlY3QgeD0iNDYiIHk9IjIyIiB3aWR0aD0iOCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iNDYiIHk9IjM0IiB3aWR0aD0iOCIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iMzQiIHk9IjM0IiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjODFDNzg0IiAvPgogIDxyZWN0IHg9IjIyIiB5PSIzNCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEyIiByeD0iMiIgZmlsbD0iIzgxQzc4NCIgLz4KICA8cmVjdCB4PSIxMCIgeT0iMzQiIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjQ2IiB3aWR0aD0iMTIiIGhlaWdodD0iOCIgcng9IjIiIGZpbGw9IiM4MUM3ODQiIC8+CiAgPHJlY3QgeD0iMTAiIHk9IjIyIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSIjODFDNzg0IiAvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iMTQiIHI9IjIiIGZpbGw9IndoaXRlIiAvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iMTgiIHI9IjIiIGZpbGw9IndoaXRlIiAvPgogIDxjaXJjbGUgY3g9IjMwIiBjeT0iMjQiIHI9IjYiIGZpbGw9IiNGRjUyNTIiIC8+Cjwvc3ZnPg==" type="image/svg+xml">
+    <!-- Emoji fallback for browsers that do not support SVG favicons -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>" type="image/svg+xml">
 </head>
-<body>    <div id="debug" style="display: none;"></div>
-    <div class="game-container"><div id="start-screen" class="screen">
+<body>
+    <div id="debug" style="display: none;"></div>
+    <div class="game-container">
+        <div id="start-screen" class="screen">
             <h1>Snake Game</h1>
             <p>Use arrow keys to control the snake</p>
             <button id="start-button" onclick="startGame()">Start Game</button>
-        </div>          <div id="game-screen" class="screen hidden">
+        </div>
+        <div id="game-screen" class="screen hidden">
             <div class="game-header">
                 <span id="score">Score: 0</span>
-                <button id="pause-button">Pause</button>
-                <button id="sound-toggle">🔊 Sound On</button>
+                <div class="control-buttons">
+                    <button id="pause-button" title="Pause/Resume Game">Pause</button>
+                    <button id="sound-toggle" title="Sound On" aria-label="Toggle Sound">🔊</button>
+                    <button id="popup-toggle" title="Messages On" aria-label="Toggle Messages">💬</button>
+                </div>
             </div>
             <div class="canvas-container">
                 <canvas id="game-canvas"></canvas>
             </div>
-        </div><div id="game-over-screen" class="screen hidden">
+        </div>
+        <div id="game-over-screen" class="screen hidden">
             <h1>Game Over!</h1>
             <p>Your final score: <span id="final-score">0</span></p>
             <p id="high-score">High Score: 0</p>
             <button id="restart-button">Play Again</button>
         </div>
     </div>
-      <script src="sounds.js"></script>
+    <script src="sounds.js"></script>
+    <script src="popup-messages.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -188,7 +188,14 @@ function toggleSound() {
     
     const soundToggle = document.getElementById('sound-toggle');
     if (soundToggle) {
-        soundToggle.textContent = soundEnabled ? '🔇 Sound Off' : '🔊 Sound On';
+        soundToggle.textContent = soundEnabled ? '🔇' : '🔊';
+        soundToggle.title = soundEnabled ? 'Sound Off' : 'Sound On';
+        
+        // Add visual feedback
+        soundToggle.classList.add('pressed');
+        setTimeout(() => {
+            soundToggle.classList.remove('pressed');
+        }, 200);
     }
 }
 
@@ -200,8 +207,8 @@ function initSoundSettings() {
     
     const soundToggle = document.getElementById('sound-toggle');
     if (soundToggle) {
-        soundToggle.textContent = localStorage.getItem('soundEnabled') !== 'false' 
-            ? '🔊 Sound On' 
-            : '🔇 Sound Off';
+        const soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
+        soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+        soundToggle.title = soundEnabled ? 'Sound On' : 'Sound Off';
     }
 }
