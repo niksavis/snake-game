@@ -973,15 +973,14 @@ function handleKeyPress(event) {
 
 function togglePause() {
     isPaused = !isPaused;
-    pauseButton.textContent = isPaused ? 'Resume' : 'Pause';
     
-    // Add visual feedback by toggling class
+    // Update button title and class based on game state
     if (isPaused) {
-        pauseButton.classList.add('resumed');
         pauseButton.title = "Resume Game";
+        pauseButton.classList.add('resumed');
     } else {
-        pauseButton.classList.remove('resumed');
         pauseButton.title = "Pause Game";
+        pauseButton.classList.remove('resumed');
     }
     
     // Add button press animation

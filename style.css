@@ -247,7 +247,8 @@ button:focus {
 }
 
 #sound-toggle,
-#popup-toggle {
+#popup-toggle,
+#pause-button {
   background-color: #4a752c;
   padding: 8px;
   font-size: 18px;
@@ -262,11 +263,13 @@ button:focus {
 }
 
 #sound-toggle:hover,
-#popup-toggle:hover {
+#popup-toggle:hover,
+#pause-button:hover {
   background-color: #5c9137;
 }
 
-#popup-toggle {
+#popup-toggle,
+#pause-button {
   font-size: 18px;
   line-height: 1;
   display: flex;
@@ -275,29 +278,21 @@ button:focus {
 }
 
 /* Special styling for the game controls */
-#pause-button {
-  background-color: #4a752c;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 15px;
-}
 
+/* Pause button icon styles */
 #pause-button {
-  padding: 8px 15px 8px 32px; /* Add space for the icon */
   position: relative;
 }
 
 #pause-button:before {
   content: "";
   display: block;
-  width: 12px; /* Fixed width */
-  height: 12px; /* Fixed height */
+  width: 12px; /* Fixed width for the icon */
+  height: 12px; /* Fixed height for the icon */
   position: absolute;
-  left: 12px;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%); /* Center vertically */
+  transform: translate(-50%, -50%); /* Center the icon */
 }
 
 #pause-button:not(.resumed):before {
