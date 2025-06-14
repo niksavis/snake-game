@@ -321,20 +321,114 @@ button:focus {
 #start-button,
 #restart-button {
   background-color: #4a752c;
-  padding: 12px 30px 12px 56px; /* Further increased left padding to prevent overlap */
+  padding: 12px 30px 12px 65px; /* Even more increased left padding to prevent overlap */
   font-size: 18px;
   position: relative;
   overflow: hidden;
+  min-width: 200px; /* Ensure button has minimum width for text and icon */
 }
 
 #start-button:before,
 #restart-button:before {
   content: "🐍";
   position: absolute;
-  left: 20px; /* Increased left position to prevent overlap */
+  left: 25px; /* Further increased left position to prevent overlap */
   font-size: 1.2em;
   top: 50%;
   transform: translateY(-50%); /* Center vertically */
+}
+
+/* Game Over Screen Styling */
+#game-over-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  position: relative;
+}
+
+#game-over-screen h1 {
+  font-size: 32px;
+  color: #e53935;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.score-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.score-box {
+  background-color: #e8f5e9;
+  border: 2px solid #4a752c;
+  border-radius: 10px;
+  padding: 15px;
+  width: 45%;
+  max-width: 180px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.score-box:hover {
+  transform: translateY(-5px);
+}
+
+.score-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4a752c;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#final-score,
+#high-score {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2e7d32;
+  height: auto;
+  padding: 5px;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  display: block;
+}
+
+#restart-button {
+  margin-top: 25px;
+  background-color: #4a752c;
+  box-shadow: 0 5px 0 #1b5e20, 0 6px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+}
+
+#restart-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 0 #1b5e20, 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+#restart-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 3px 0 #1b5e20, 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive design */

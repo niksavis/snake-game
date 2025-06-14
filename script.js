@@ -49,12 +49,23 @@ function init() {
         gameOverScreen = document.getElementById('game-over-screen');
         startButton = document.getElementById('start-button');
         pauseButton = document.getElementById('pause-button');
-        restartButton = document.getElementById('restart-button');        scoreDisplay = document.getElementById('score');
+        restartButton = document.getElementById('restart-button');
+        scoreDisplay = document.getElementById('score');
         finalScoreDisplay = document.getElementById('final-score');
         highScoreDisplay = document.getElementById('high-score');
         soundToggle = document.getElementById('sound-toggle');
-        popupToggle = document.getElementById('popup-toggle');
-          // Note: popup message settings are now initialized in popup-messages.js
+        popupToggle = document.getElementById('popup-toggle');          // Note: popup message settings are now initialized in popup-messages.js
+        
+        // Make sure only the start screen is visible initially
+        if (startScreen) {
+            startScreen.classList.remove('hidden');
+        }
+        if (gameScreen) {
+            gameScreen.classList.add('hidden');
+        }
+        if (gameOverScreen) {
+            gameOverScreen.classList.add('hidden');
+        }
         
         // Initialize the canvas
         canvas = document.getElementById('game-canvas');
@@ -98,10 +109,9 @@ function init() {
         
         // Touch controls for mobile
         setupTouchControls();
-        
-        // Set high score display
+          // Set high score display
         if (highScoreDisplay) {
-            highScoreDisplay.textContent = `High Score: ${highScore}`;
+            highScoreDisplay.textContent = highScore;
         }
         
         // Initialize sounds
@@ -198,9 +208,8 @@ function startGame() {
         } else {
             debug('ERROR: Score display not found');
         }
-        
-        if (highScoreDisplay) {
-            highScoreDisplay.textContent = `High Score: ${highScore}`;
+          if (highScoreDisplay) {
+            highScoreDisplay.textContent = highScore;
         }
         
         // Show game screen, hide others
@@ -988,7 +997,8 @@ function gameOver() {
     
     // Update game state
     gameState = 'gameOver';
-      // Play game over sound
+      
+    // Play game over sound
     safePlaySound(gameOverSound);
     
     // Check for high score
@@ -998,12 +1008,20 @@ function gameOver() {
     }
     
     // Update displays
-    finalScoreDisplay.textContent = score;
-    highScoreDisplay.textContent = `High Score: ${highScore}`;
+    if (finalScoreDisplay) {
+        finalScoreDisplay.textContent = score;
+    }
+    if (highScoreDisplay) {
+        highScoreDisplay.textContent = highScore;
+    }
     
     // Show game over screen
-    gameScreen.classList.add('hidden');
-    gameOverScreen.classList.remove('hidden');
+    if (gameScreen) {
+        gameScreen.classList.add('hidden');
+    }
+    if (gameOverScreen) {
+        gameOverScreen.classList.remove('hidden');
+    }
 }
 
 // Helper function to safely play sounds (replaced with direct playSound call since Web Audio API is more reliable)

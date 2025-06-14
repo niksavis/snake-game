@@ -33,8 +33,16 @@
         </div>
         <div id="game-over-screen" class="screen hidden">
             <h1>Game Over!</h1>
-            <p>Your final score: <span id="final-score">0</span></p>
-            <p id="high-score">High Score: 0</p>
+            <div class="score-container">
+                <div class="score-box">
+                    <div class="score-label">Final Score</div>
+                    <div id="final-score">0</div>
+                </div>
+                <div class="score-box">
+                    <div class="score-label">High Score</div>
+                    <div id="high-score">0</div>
+                </div>
+            </div>
             <button id="restart-button">Play Again</button>
         </div>
     </div>
