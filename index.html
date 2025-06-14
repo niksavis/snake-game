@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="debug" style="position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px; font-size: 12px; z-index: 9999;"></div>
+    <button onclick="debug('Test button clicked!')" style="position: fixed; top: 10px; right: 10px; z-index: 9999;">Test Debug</button>
+    <div class="game-container">
+        <div id="start-screen" class="screen">            <h1>Snake Game</h1>
+            <p>Use arrow keys to control the snake</p>
+            <button id="start-button" onclick="startGame()">Start Game</button>
+        </div>
+        
+        <div id="game-screen" class="screen hidden">
+            <div class="game-header">
+                <span id="score">Score: 0</span>
+                <button id="pause-button">Pause</button>
+            </div>
+            <canvas id="game-canvas"></canvas>
+        </div>
+          <div id="game-over-screen" class="screen hidden">
+            <h1>Game Over!</h1>
+            <p>Your final score: <span id="final-score">0</span></p>
+            <p id="high-score">High Score: 0</p>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button id="sound-toggle">🔊 Sound On</button>
+    </div>
+    
+    <script src="sounds.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

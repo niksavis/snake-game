@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.screen {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #4a752c;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px 0;
+  font-size: 16px;
+  background-color: #4a752c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #5c9137;
+}
+
+button:focus {
+  outline: 3px solid #8bc34a;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#game-canvas {
+  border: 2px solid #4a752c;
+  background-color: #e8f5e9;
+  display: block;
+  margin: 0 auto;
+}
+
+#score,
+#high-score,
+#final-score {
+  font-weight: bold;
+  color: #4a752c;
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.powerup-message {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 20px;
+  z-index: 10;
+  animation: pulse 0.5s infinite alternate;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+#sound-toggle {
+  background-color: #757575;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+#sound-toggle:hover {
+  background-color: #616161;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .game-container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
