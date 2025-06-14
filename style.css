@@ -88,6 +88,8 @@ button:focus {
   align-items: center;
   margin: 0 auto;
   padding: 0;
+  position: relative; /* Needed for positioning the powerup message */
+  overflow: visible; /* Allow powerup message to overflow if needed */
 }
 
 #game-canvas {
@@ -113,7 +115,7 @@ button:focus {
 
 .powerup-message {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.7);
@@ -123,6 +125,8 @@ button:focus {
   font-size: 20px;
   z-index: 10;
   animation: pulse 0.5s infinite alternate;
+  text-align: center;
+  pointer-events: none;
 }
 
 .fade-out {

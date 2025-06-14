@@ -303,12 +303,21 @@ function gameLoop() {
         // Remove the last segment (snake moves without growing)
         snake.pop();
     }
-    
-    function displayPowerupMessage(message) {
+      function displayPowerupMessage(message) {
         const powerupMsg = document.createElement('div');
         powerupMsg.className = 'powerup-message';
         powerupMsg.textContent = message;
-        gameScreen.appendChild(powerupMsg);
+        
+        // Find the canvas container to position the message relative to the game area
+        const canvasContainer = document.querySelector('.canvas-container');
+        if (canvasContainer) {
+            // Position the message within the canvas container for proper centering
+            canvasContainer.style.position = 'relative'; // Ensure the container is positioned
+            canvasContainer.appendChild(powerupMsg);
+        } else {
+            // Fallback to the game screen
+            gameScreen.appendChild(powerupMsg);
+        }
         
         setTimeout(() => {
             powerupMsg.classList.add('fade-out');
