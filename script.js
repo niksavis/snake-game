@@ -118,14 +118,24 @@ function init() {
 }
 
 function resizeCanvas() {
-    // Calculate canvas size based on window width and maintain aspect ratio
-    let maxWidth = Math.min(600, window.innerWidth - 40);
-    canvas.width = maxWidth;
-    canvas.height = maxWidth;
-    
-    // If the game is running, redraw everything
-    if (gameState === 'playing') {
-        drawGame();
+    try {
+        // Get the game container width to properly size the canvas
+        const gameContainer = document.querySelector('.game-container');
+        const containerWidth = gameContainer ? gameContainer.clientWidth - 40 : window.innerWidth - 40;
+        
+        // Calculate canvas size based on container width and maintain aspect ratio
+        let maxWidth = Math.min(560, containerWidth); // Subtract padding
+        debug(`Resizing canvas to ${maxWidth}px`);
+        
+        canvas.width = maxWidth;
+        canvas.height = maxWidth;
+        
+        // If the game is running, redraw everything
+        if (gameState === 'playing') {
+            drawGame();
+        }
+    } catch (error) {
+        debug(`ERROR during canvas resize: ${error.message}`);
     }
 }
 

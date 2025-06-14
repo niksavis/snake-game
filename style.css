@@ -23,14 +23,18 @@ body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .screen {
   padding: 20px;
+  width: 100%;
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 h1 {
@@ -62,11 +66,28 @@ button:focus {
   outline: 3px solid #8bc34a;
 }
 
-.game-header {
+/* Removed duplicate game-header definition */
+
+.game-screen {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+}
+
+.game-header {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 10px;
+}
+
+.canvas-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
 }
 
 #game-canvas {
@@ -74,6 +95,7 @@ button:focus {
   background-color: #e8f5e9;
   display: block;
   margin: 0 auto;
+  max-width: 100%;
 }
 
 #score,
