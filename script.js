@@ -14,6 +14,7 @@ let isPaused = false;
 let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
 let gameState = 'start'; // 'start', 'playing', 'gameOver'
+let scoreAnimations = []; // Array to store floating score animations
 
 // DOM elements - will initialize these in the init function
 let startScreen;
@@ -247,18 +248,18 @@ function gameLoop() {
             return;
         }
         
-        // Check if snake eats food
+    // Check if snake eats food
     if (snake[0].x === food.x && snake[0].y === food.y) {
         // Increase score
         score += 10;
-        scoreDisplay.textContent = `Score: ${score}`;
+        updateScoreDisplay(score, '+10');
           // Play eat sound
         safePlaySound(eatSound);
         
         // Don't remove the last segment (snake grows)
         // Generate new food
         generateFood();
-    } 
+    }
     // Check if snake eats special food
     else if (hasSpecialFood && snake[0].x === specialFood.x && snake[0].y === specialFood.y) {
         // Apply special food effect based on type
@@ -279,17 +280,15 @@ function gameLoop() {
                 displayPowerupMessage("Speed Boost! 🚀");
                 break;
                 
-            case 1: // Double points
-                score += 20; // Double the normal points
-                scoreDisplay.textContent = `Score: ${score}`;
-                displayPowerupMessage("Double Points! 2️⃣");
+            case 1: // Double points                score += 20; // Double the normal points
+                updateScoreDisplay(score, '+20');
+                displayPowerupMessage("Double Points! 🍏");
                 break;
-                
-            case 2: // Grow by 3 instead of 1
+                  case 2: // Grow by 3 instead of 1
                 // Add 2 extra segments
                 const tail = snake[snake.length - 1];
                 snake.push({...tail}, {...tail});
-                displayPowerupMessage("Super Growth! 🐍");
+                displayPowerupMessage("Super Growth! +3 🐍");
                 break;
         }        // Play special sound for power-up
         safePlaySound(specialFoodSound);
@@ -300,31 +299,83 @@ function gameLoop() {
     } else {
         // Remove the last segment (snake moves without growing)
         snake.pop();
-    }
-      function displayPowerupMessage(message) {
+    }    function displayPowerupMessage(message) {
         const powerupMsg = document.createElement('div');
         powerupMsg.className = 'powerup-message';
+        
+        // Replace the "2️⃣" icon with a green apple icon for Double Points
+        if (message.includes('Double')) {
+            message = message.replace("2️⃣", "🍏");
+        }
+        
         powerupMsg.textContent = message;
+        
+        // Enhanced styles for semi-transparency and better blur effect
+        powerupMsg.style.backdropFilter = 'blur(5px)'; 
+        
+        // Make powerup message 20% larger than the current size (which was 50% of original)
+        // This results in ~60% of original size (50% * 1.2 = 60%)
+        powerupMsg.style.fontSize = '13.2px'; // 20% larger than 11px
+        powerupMsg.style.padding = '7.2px 14.4px'; // 20% larger padding
+        
+        // Set different colors based on the power-up type - matching the special food colors
+        if (message.includes('Speed')) {
+            // Match yellow/orange of speed boost food with 20% less transparency
+            powerupMsg.style.backgroundColor = 'rgba(255, 235, 59, 0.38)'; // 20% less transparent than 0.32
+            powerupMsg.style.borderColor = 'rgba(255, 152, 0, 0.48)'; // 20% less transparent
+            powerupMsg.style.color = 'black';
+            powerupMsg.style.fontWeight = 'bold';
+            powerupMsg.style.textShadow = '0 0 5px rgba(255, 255, 255, 0.9)';
+            powerupMsg.style.boxShadow = '0 0 15px rgba(255, 235, 59, 0.36), 0 0 30px rgba(255, 152, 0, 0.24)'; // 20% less transparent
+        } else if (message.includes('Double')) {
+            // Match green of double points food with 20% less transparency
+            powerupMsg.style.backgroundColor = 'rgba(76, 175, 80, 0.38)'; // 20% less transparent than 0.32
+            powerupMsg.style.borderColor = 'rgba(139, 195, 74, 0.48)'; // 20% less transparent
+            powerupMsg.style.color = 'white';
+            powerupMsg.style.fontWeight = 'bold';
+            powerupMsg.style.textShadow = '0 0 6px rgba(0, 0, 0, 0.9)';
+            powerupMsg.style.boxShadow = '0 0 15px rgba(76, 175, 80, 0.36), 0 0 30px rgba(139, 195, 74, 0.24)'; // 20% less transparent
+        } else if (message.includes('Growth')) {
+            // Match purple of growth food with 20% less transparency
+            powerupMsg.style.backgroundColor = 'rgba(170, 0, 255, 0.38)'; // 20% less transparent than 0.32
+            powerupMsg.style.borderColor = 'rgba(234, 128, 252, 0.48)'; // 20% less transparent
+            powerupMsg.style.borderWidth = '2px'; // Maintain border width
+            powerupMsg.style.fontWeight = 'bold';
+            powerupMsg.style.textShadow = '0 0 8px white, 0 0 15px white';
+            powerupMsg.style.boxShadow = '0 0 15px rgba(170, 0, 255, 0.36), 0 0 30px rgba(234, 128, 252, 0.3)'; // 20% less transparent
+            powerupMsg.style.color = 'white';
+        }
+        
+        // 20% less transparent than current 0.45 opacity
+        powerupMsg.style.opacity = '0.54';
         
         // Find the canvas container to position the message relative to the game area
         const canvasContainer = document.querySelector('.canvas-container');
         if (canvasContainer) {
-            // Position the message within the canvas container for proper centering
-            canvasContainer.style.position = 'relative'; // Ensure the container is positioned
+            canvasContainer.style.position = 'relative';
             canvasContainer.appendChild(powerupMsg);
         } else {
-            // Fallback to the game screen
             gameScreen.appendChild(powerupMsg);
         }
         
+        // Add a slight entrance animation
+        powerupMsg.style.transform = 'translate(-50%, -50%) scale(0)';
+        setTimeout(() => {
+            powerupMsg.style.transition = 'transform 0.3s ease-out, opacity 0.5s ease-out';
+            powerupMsg.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 10);
+        
+        // Show message for half the original time (1000ms instead of 2000ms)
         setTimeout(() => {
             powerupMsg.classList.add('fade-out');
             setTimeout(() => {
                 powerupMsg.remove();
-            }, 500);
-        }, 1500);
-    }
-      // Draw the game
+            }, 400); // Keep the fade-out time the same
+        }, 1000); // Keep the display time the same
+    }// Update score animations
+    updateScoreAnimations();
+      
+    // Draw the game
     drawGame();
     } catch (error) {
         debug(`ERROR in game loop: ${error.message}`);
@@ -476,7 +527,15 @@ function drawGame() {
     
     // Draw the snake
     snake.forEach((segment, index) => {
-        ctx.fillStyle = index === 0 ? '#2e7d32' : '#4caf50'; // Head is darker green
+        // Create gradient coloring for snake body
+        if (index === 0) {
+            // Head is darker green
+            ctx.fillStyle = '#2e7d32';
+        } else {
+            // Body segments with gradient color
+            const greenIntensity = Math.max(50, 100 - (index * 3) % 40);
+            ctx.fillStyle = `rgb(${50 + greenIntensity}, ${180 - index % 30}, ${50 + greenIntensity % 40})`;
+        }
         
         // Draw rounded corners for the snake segments
         const radius = cellSize / 5;
@@ -492,8 +551,9 @@ function drawGame() {
         ctx.closePath();
         ctx.fill();
         
-        // Draw eyes on the head
+        // Draw eyes and tongue on the head
         if (index === 0) {
+            // Draw eyes
             ctx.fillStyle = 'white';
             
             // Position eyes based on direction
@@ -533,63 +593,270 @@ function drawGame() {
             ctx.beginPath();
             ctx.arc(eyeX2, eyeY2, eyeRadius, 0, Math.PI * 2);
             ctx.fill();
+            
+            // Add pupils to make eyes follow direction
+            ctx.fillStyle = 'black';
+            const pupilRadius = eyeRadius / 2;
+            let pupilOffsetX = 0;
+            let pupilOffsetY = 0;
+            
+            switch(direction) {
+                case 'up': pupilOffsetY = -pupilRadius/2; break;
+                case 'down': pupilOffsetY = pupilRadius/2; break;
+                case 'left': pupilOffsetX = -pupilRadius/2; break;
+                case 'right': pupilOffsetX = pupilRadius/2; break;
+            }
+            
+            ctx.beginPath();
+            ctx.arc(eyeX1 + pupilOffsetX, eyeY1 + pupilOffsetY, pupilRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(eyeX2 + pupilOffsetX, eyeY2 + pupilOffsetY, pupilRadius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Add occasional tongue animation (every ~1 second)
+            if (frameCount % 60 < 10) {
+                ctx.fillStyle = '#ff5252';
+                if (direction === 'right') {
+                    ctx.beginPath();
+                    ctx.moveTo((segment.x + 1) * cellSize, segment.y * cellSize + cellSize/2);
+                    ctx.lineTo((segment.x + 1) * cellSize + cellSize/3, segment.y * cellSize + cellSize/3);
+                    ctx.lineTo((segment.x + 1) * cellSize + cellSize/3, segment.y * cellSize + cellSize*2/3);
+                    ctx.fill();
+                } else if (direction === 'left') {
+                    ctx.beginPath();
+                    ctx.moveTo(segment.x * cellSize, segment.y * cellSize + cellSize/2);
+                    ctx.lineTo(segment.x * cellSize - cellSize/3, segment.y * cellSize + cellSize/3);
+                    ctx.lineTo(segment.x * cellSize - cellSize/3, segment.y * cellSize + cellSize*2/3);
+                    ctx.fill();
+                } else if (direction === 'up') {
+                    ctx.beginPath();
+                    ctx.moveTo(segment.x * cellSize + cellSize/2, segment.y * cellSize);
+                    ctx.lineTo(segment.x * cellSize + cellSize/3, segment.y * cellSize - cellSize/3);
+                    ctx.lineTo(segment.x * cellSize + cellSize*2/3, segment.y * cellSize - cellSize/3);
+                    ctx.fill();
+                } else if (direction === 'down') {
+                    ctx.beginPath();
+                    ctx.moveTo(segment.x * cellSize + cellSize/2, (segment.y + 1) * cellSize);
+                    ctx.lineTo(segment.x * cellSize + cellSize/3, (segment.y + 1) * cellSize + cellSize/3);
+                    ctx.lineTo(segment.x * cellSize + cellSize*2/3, (segment.y + 1) * cellSize + cellSize/3);
+                    ctx.fill();
+                }
+            }
         }
     });
-      // Draw the food
+    // Draw the food
     ctx.fillStyle = '#ff5252'; // Red food
     const foodX = food.x * cellSize;
     const foodY = food.y * cellSize;
     
-    // Draw apple-shaped food
-    ctx.beginPath();
-    ctx.arc(foodX + cellSize/2, foodY + cellSize/2, cellSize/2 * 0.8, 0, Math.PI * 2);
-    ctx.fill();
+    // Calculate a scaling factor based on frameCount for a pulsing effect
+    const pulseFactor = 1 + 0.1 * Math.sin(frameCount * 0.1);
     
-    // Add a leaf
-    ctx.fillStyle = '#81c784';
+    // Draw apple-shaped food with pulsing effect
     ctx.beginPath();
-    ctx.ellipse(
-        foodX + cellSize/2 + cellSize/8, 
-        foodY + cellSize/3, 
-        cellSize/4, 
-        cellSize/8, 
-        Math.PI/4, 
+    ctx.arc(
+        foodX + cellSize/2, 
+        foodY + cellSize/2, 
+        cellSize/2 * 0.8 * pulseFactor, 
         0, 
         Math.PI * 2
     );
     ctx.fill();
     
+    // Add a leaf with slight wiggle
+    ctx.fillStyle = '#81c784';
+    ctx.beginPath();
+    const leafAngle = Math.PI/4 + Math.sin(frameCount * 0.05) * 0.1;
+    ctx.ellipse(
+        foodX + cellSize/2 + cellSize/8, 
+        foodY + cellSize/3, 
+        cellSize/4,
+        cellSize/8,
+        leafAngle,
+        0,
+        Math.PI * 2
+    );
+    ctx.fill();
     // Draw special food if it exists
-    if (hasSpecialFood) {
-        let specialFoodColor;
+    if (hasSpecialFood) {        // Define more vibrant colors for each power-up type
+        let specialFoodColor, specialFoodIconChar, specialFoodBorderColor;
         switch(specialFood.type) {
-            case 0: specialFoodColor = '#ffeb3b'; break; // Yellow for speed boost
-            case 1: specialFoodColor = '#4caf50'; break; // Green for double points
-            case 2: specialFoodColor = '#9c27b0'; break; // Purple for invincibility
+            case 0: 
+                specialFoodColor = '#ffeb3b';         // Bright yellow core for speed boost
+                specialFoodBorderColor = '#ff9800';   // Orange glow/border
+                specialFoodIconChar = '⚡';           // Lightning bolt icon
+                break;
+            case 1: 
+                specialFoodColor = '#4caf50';         // Green core for double points
+                specialFoodBorderColor = '#8bc34a';   // Light green glow/border
+                specialFoodIconChar = '×2';           // ×2 icon
+                break;            case 2: 
+                specialFoodColor = '#aa00ff';         // Vivid purple core for super growth
+                specialFoodBorderColor = '#ea80fc';   // Bright pink/purple border for contrast
+                specialFoodIconChar = '+3';           // Clear +3 icon (more intuitive for growth)
+                break;
         }
         
         const specialFoodX = specialFood.x * cellSize;
         const specialFoodY = specialFood.y * cellSize;
         
-        // Draw star-shaped special food
-        ctx.fillStyle = specialFoodColor;
-        drawStar(
+        // Calculate time remaining for special food
+        const specialFoodRemaining = 10 - ((Date.now() - (specialFoodTimer._idleStart + specialFoodTimer._idleTimeout - Date.now())) / 1000);
+        const pulseSpeed = Math.max(0.05, specialFoodRemaining / 150); // Pulse faster as time runs out
+        const pulseFactor = 1 + 0.15 * Math.sin(frameCount * pulseSpeed);
+        
+        // Create a more contained, visible glow effect
+        const glowSize = cellSize * 1.5; // More contained than before
+        const gradient = ctx.createRadialGradient(
             specialFoodX + cellSize/2, 
             specialFoodY + cellSize/2, 
-            5, 
-            cellSize/2 * 0.8, 
-            cellSize/4
+            cellSize/4,                  // Smaller inner radius
+            specialFoodX + cellSize/2, 
+            specialFoodY + cellSize/2, 
+            glowSize/2                   // Smaller outer radius
         );
         
-        // Make it pulsate
-        if (Math.floor(Date.now() / 200) % 2 === 0) {
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        // More defined gradient with stronger core
+        gradient.addColorStop(0, specialFoodColor);
+        gradient.addColorStop(0.6, specialFoodBorderColor);
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        
+        // Draw the glow effect
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(
+            specialFoodX + cellSize/2,
+            specialFoodY + cellSize/2,
+            glowSize/2,
+            0,
+            Math.PI * 2
+        );
+        ctx.fill();
+          // Rotate for the star
+        ctx.save();
+        ctx.translate(specialFoodX + cellSize/2, specialFoodY + cellSize/2);
+        
+        // Different rotation speeds based on power-up type
+        let rotationSpeed = 0.02;
+        if (specialFood.type === 2) { // Growth power-up gets faster rotation
+            rotationSpeed = 0.03;
         }
-    }
-    
-    // Function to draw a star
+        ctx.rotate(frameCount * rotationSpeed);
+        
+        // Draw a more defined star shape with solid color and border
+        ctx.fillStyle = specialFoodColor;          // Draw different star shapes based on power-up type
+        if (specialFood.type === 2) { // Growth power-up
+            // Create a strong outer glow first
+            ctx.shadowColor = specialFoodColor;
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Draw a larger, more prominent star for growth power-up
+            drawStar(0, 0, 6, cellSize/2 * 0.95 * pulseFactor, cellSize/3 * pulseFactor);
+            
+            // Add a pulse ring effect
+            ctx.strokeStyle = specialFoodBorderColor;
+            ctx.lineWidth = cellSize * 0.08 * (1 + 0.3 * Math.sin(frameCount * 0.1));
+            ctx.beginPath();
+            ctx.arc(0, 0, cellSize/2, 0, Math.PI * 2);
+            ctx.stroke();
+        } else if (specialFood.type === 0) { // Speed boost
+            drawStar(0, 0, 5, cellSize/2 * 0.85 * pulseFactor, cellSize/3 * pulseFactor);
+        } else { // Double points
+            drawStar(0, 0, 4, cellSize/2 * 0.85 * pulseFactor, cellSize/3 * pulseFactor);
+        }
+        
+        // Add a border to the star for better visibility
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = cellSize * 0.05;
+        ctx.stroke();
+        
+        ctx.restore();          // Add power-up icon in the middle of the star
+        // First add a text background for better readability
+        if (specialFood.type === 2) { // Growth power-up gets special treatment
+            // Add a circular background for the icon text
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.beginPath();
+            ctx.arc(
+                specialFoodX + cellSize/2,
+                specialFoodY + cellSize/2,
+                cellSize/3.5,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+        
+        // Draw text with a slight outline for better visibility
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Use a larger font for the growth power-up to improve visibility
+        if (specialFood.type === 2) {
+            // Draw text with shadow and larger size for growth
+            ctx.font = `bold ${cellSize/1.6}px Arial`;
+            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowBlur = 4;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+            
+            // Draw the text with extra emphasis
+            ctx.fillText(
+                specialFoodIconChar,
+                specialFoodX + cellSize/2,
+                specialFoodY + cellSize/2
+            );
+            
+            // Add a subtle glow around text
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'white';
+            ctx.strokeText(
+                specialFoodIconChar,
+                specialFoodX + cellSize/2,
+                specialFoodY + cellSize/2
+            );
+        } else {
+            // Standard text for other power-ups
+            ctx.font = `bold ${cellSize/1.8}px Arial`;
+            ctx.shadowColor = 'rgba(0,0,0,0.7)';
+            ctx.shadowBlur = 3;
+            ctx.fillText(
+                specialFoodIconChar,
+                specialFoodX + cellSize/2,
+                specialFoodY + cellSize/2
+            );
+        }
+        
+        // Reset shadow
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        // Show countdown timer for the last 5 seconds with decreasing size
+        if (specialFoodRemaining < 5) {
+            // Add a small shadow around the timer for better visibility
+            ctx.shadowColor = 'black';
+            ctx.shadowBlur = 4;
+            
+            ctx.fillStyle = 'white';
+            const timerSize = Math.min(1.0, specialFoodRemaining / 3) * cellSize/2;
+            ctx.font = `bold ${timerSize}px Arial`;
+            
+            // Position at the bottom right of the star for less interference
+            ctx.fillText(
+                Math.ceil(specialFoodRemaining).toString(),
+                specialFoodX + cellSize * 0.8,
+                specialFoodY + cellSize * 0.8
+            );
+            
+            ctx.shadowBlur = 0; // Reset shadow
+        }
+    }    // Function to draw a star
     function drawStar(cx, cy, spikes, outerRadius, innerRadius) {
         let rot = Math.PI / 2 * 3;
         let x = cx;
@@ -613,7 +880,14 @@ function drawGame() {
         
         ctx.lineTo(cx, cy - outerRadius);
         ctx.closePath();
+        
+        // Create a solid fill first
         ctx.fill();
+        
+        // Add a visible stroke to make the star more visible
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'white';
+        ctx.stroke();
     }
     
     // Draw a grid (optional - for debugging)
@@ -711,4 +985,63 @@ function gameOver() {
 // Helper function to safely play sounds (replaced with direct playSound call since Web Audio API is more reliable)
 function safePlaySound(sound) {
     playSound(sound);
+}
+
+// Helper function to animate score change
+function updateScoreDisplay(newScore, scoreChange) {
+    // Update score display
+    scoreDisplay.textContent = `Score: ${newScore}`;
+    
+    // Add flash animation class
+    scoreDisplay.classList.add('score-flash');
+    
+    // Remove animation class after it completes
+    setTimeout(() => {
+        scoreDisplay.classList.remove('score-flash');
+    }, 300);
+    
+    // Add floating score animation
+    if (scoreChange) {
+        const head = snake[0];
+        scoreAnimations.push({
+            x: head.x,
+            y: head.y,
+            value: scoreChange,
+            opacity: 1,
+            offsetY: 0
+        });
+    }
+}
+
+// Function to update and draw score animations
+function updateScoreAnimations() {
+    const cellSize = canvas.width / Math.floor(canvas.width / gridSize);
+    
+    // Update each animation
+    for (let i = 0; i < scoreAnimations.length; i++) {
+        const anim = scoreAnimations[i];
+        
+        // Draw the score value
+        ctx.save();
+        ctx.font = `bold ${cellSize * 0.5}px Arial`;
+        ctx.fillStyle = `rgba(255, 82, 82, ${anim.opacity})`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(
+            anim.value,
+            anim.x * cellSize + cellSize / 2,
+            (anim.y * cellSize) - anim.offsetY
+        );
+        ctx.restore();
+        
+        // Update animation
+        anim.opacity -= 0.02;
+        anim.offsetY += 1;
+        
+        // Remove finished animations
+        if (anim.opacity <= 0) {
+            scoreAnimations.splice(i, 1);
+            i--;
+        }
+    }
 }

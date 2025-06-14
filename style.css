@@ -108,6 +108,23 @@ button:focus {
 #final-score {
   font-weight: bold;
   color: #4a752c;
+  transition: transform 0.2s;
+}
+
+.score-flash {
+  animation: scoreFlash 0.3s ease;
+}
+
+@keyframes scoreFlash {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Removed .controls as sound toggle is now in game header */
@@ -117,28 +134,36 @@ button:focus {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.38); /* 20% less transparent than 0.32 */
   color: white;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 20px;
+  padding: 7.2px 14.4px; /* 20% larger than half of original padding */
+  border-radius: 12px; /* 20% larger than half of original radius */
+  font-size: 13.2px; /* 20% larger than half of original font size */
+  font-weight: bold;
   z-index: 10;
-  animation: pulse 0.5s infinite alternate;
+  animation: powerup-pulse 0.3s infinite alternate; /* Keep the faster animation */
   text-align: center;
   pointer-events: none;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* 20% less transparent */
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.48); /* 20% less transparent */
+  border: 1px solid rgba(255, 255, 255, 0.36); /* 20% less transparent */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); /* For Safari support */
 }
 
 .fade-out {
   opacity: 0;
-  transition: opacity 0.5s;
+  transition: opacity 0.4s; /* Half the fade-out time */
 }
 
-@keyframes pulse {
+@keyframes powerup-pulse {
   0% {
     transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
   100% {
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
   }
 }
 
