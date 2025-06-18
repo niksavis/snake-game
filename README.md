@@ -91,7 +91,7 @@ This game works in all modern browsers that support HTML5 Canvas and Web Audio A
 No installation required! Simply clone or download the repository and open `index.html` in your browser.
 
 ```bash
-git clone https://github.com/yourusername/snake-game.git
+git clone https://github.com/niksavis/snake-game.git
 cd snake-game
 ```
 
